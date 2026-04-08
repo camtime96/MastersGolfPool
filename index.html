@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2026 Masters Fantasy Pool Tracker</title>
+  <style>
+    :root{
+      --bg:#f8fafc;
+      --card:#ffffff;
+      --text:#0f172a;
+      --muted:#64748b;
+      --border:#e2e8f0;
+      --green:#16a34a;
+      --blue:#2563eb;
+      --red:#dc2626;
+      --gray:#475569;
+      --shadow:0 8px 24px rgba(15,23,42,.08);
+      --radius:18px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Arial, Helvetica, sans-serif;
+      background:var(--bg);
+      color:var(--text);
+    }
+    .wrap{
+      max-width:1400px;
+      margin:0 auto;
+      padding:24px;
+    }
+    .grid{
+      display:grid;
+      gap:18px;
+    }
+    .top-grid{
+      grid-template-columns:2fr 1fr;
+    }
+    .board-grid{
+      grid-template-columns:repeat(auto-fit,minmax(340px,1fr));
+    }
+    .two-col{
+      grid-template-columns:1.2fr .8fr;
+    }
+    .card{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:20px;
+    }
+    h1,h2,h3{margin:0}
+    h1{font-size:32px}
+    h2{font-size:24px}
+    h3{font-size:20px}
+    .muted{color:var(--muted)}
+    .small{font-size:13px}
+    .row{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+    }
+    .stack{display:flex; flex-direction:column; gap:10px}
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      padding:6px 10px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:700;
+      border:1px solid var(--border);
+      background:#fff;
+    }
+    .badge.green{background:var(--green); color:#fff; border-color:var(--green)}
+    .badge.blue{background:var(--blue); color:#fff; border-color:var(--blue)}
+    .badge.red{background:var(--red); color:#fff; border-color:var(--red)}
+    .badge.gray{background:#fff; color:var(--gray)}
+    .team-card .team-header{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      align-items:flex-start;
+      margin-bottom:14px;
+    }
+    .team-total{
+      text-align:right;
+    }
+    .team-total .label{
+      color:var(--muted);
+      font-size:12px;
+    }
+    .team-total .score{
+      font-size:34px;
+      font-weight:800;
+    }
+    .player{
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:12px;
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      align-items:center;
+      margin-top:8px;
+    }
+    .player-name{
+      font-weight:700;
+      margin-bottom:4px;
+    }
+    .player-score{
+      font-size:18px;
+      font-weight:800;
+      min-width:34px;
+      text-align:right;
+    }
+    button{
+      appearance:none;
+      border:none;
+      border-radius:12px;
+      padding:11px 14px;
+      font-weight:700;
+      cursor:pointer;
+      background:var(--blue);
+      color:#fff;
+    }
+    button.secondary{
+      background:#fff;
+      color:var(--text);
+      border:1px solid var(--border);
+    }
+    button:disabled{
+      opacity:.6;
+      cursor:not-allowed;
+    }
+    input, select, textarea{
+      width:100%;
+      border:1px solid var(--border);
+      border-radius:12px;
+      padding:11px 12px;
+      font-size:14px;
+      background:#fff;
+      color:var(--text);
+    }
+    textarea{
+      min-height:240px;
+      resize:vertical;
+      font-family:Consolas, monospace;
+    }
+    table{
+      width:100%;
+      border-collapse:collapse;
+      font-size:14px;
+    }
+    th, td{
+      border-bottom:1px solid var(--border);
+      padding:10px 8px;
+      text-align:left;
+      vertical-align:middle;
+    }
+    th{color:var(--muted); font-size:12px; text-transform:uppercase; letter-spacing:.04em}
+    .manual-table input, .manual-table select{
+      padding:8px 10px;
+      font-size:13px;
+    }
+    .actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+    .error{
+      color:var(--red);
+      font-size:13px;
+      font-weight:700;
+    }
+    .success{
+      color:var(--green);
+      font-size:13px;
+      font-weight:700;
+    }
+    .section-title{
+      margin-bottom:12px;
+    }
+    .hint{
+      padding:12px 14px;
+      border-radius:12px;
+      background:#eff6ff;
+      color:#1e3a8a;
+      font-size:13px;
+      border:1px solid #bfdbfe;
+    }
+    pre{
+      background:#0f172a;
+      color:#e2e8f0;
+      padding:14px;
+      border-radius:14px;
+      overflow:auto;
+      font-size:12px;
+    }
+    @media (max-width: 980px){
+      .top-grid,.two-col{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="grid top-grid">
+      <div class="card">
+        <h1>2026 Masters Fantasy Pool</h1>
+        <div class="muted" style="margin-top:10px;">5-man pool • Members: Marty, Don, Cameron, Jeff, Mark</div>
+        <div class="muted" style="margin-top:6px;">Rule: lowest total team score wins, but each member must have at least 3 of 5 players make the cut.</div>
+        <div class="small muted" style="margin-top:10px;">Last updated: <span id="lastUpdated"></span></div>
+      </div>
+      <div class="card stack">
+        <h3>Pool Snapshot</h3>
+        <div class="row"><span>Active golfers</span><strong id="activeCount">0</strong></div>
+        <div class="row"><span>Cut golfers</span><strong id="cutCount">0</strong></div>
+        <div class="row"><span>Not started</span><strong id="notStartedCount">0</strong></div>
+        <div class="row"><span>Pool members</span><strong>5</strong></div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="section-title">
+        <h2>Pool Leaderboard</h2>
+      </div>
+      <div id="leaderboard" class="grid board-grid"></div>
+    </div>
+
+    <div class="grid two-col" style="margin-top:18px;">
+      <div class="card">
+        <div class="section-title">
+          <h3>Manual Score Entry</h3>
+        </div>
+        <div class="hint" style="margin-bottom:12px;">
+          If tracking is wrong, update any golfer here and click Apply Manual Changes.
+        </div>
+        <div style="overflow:auto;">
+          <table class="manual-table">
+            <thead>
+              <tr>
+                <th>Player</th>
+                <th>Score to Par</th>
+                <th>Status</th>
+                <th>Thru</th>
+              </tr>
+            </thead>
+            <tbody id="manualTableBody"></tbody>
+          </table>
+        </div>
+        <div class="actions" style="margin-top:14px;">
+          <button id="applyManualBtn">Apply Manual Changes</button>
+          <button id="resetBtn" class="secondary">Reset to Even</button>
+          <button id="saveBtn" class="secondary">Save Local Copy</button>
+          <button id="loadBtn" class="secondary">Load Saved Copy</button>
+        </div>
+        <div id="manualMessage" style="margin-top:12px;"></div>
+      </div>
+
+      <div class="card stack">
+        <div>
+          <h3>Paste JSON Instead</h3>
+          <div class="muted small" style="margin-top:6px;">Optional: paste score JSON and apply it directly.</div>
+        </div>
+        <textarea id="jsonInput"></textarea>
+        <div class="actions">
+          <button id="applyJsonBtn">Apply JSON</button>
+          <button id="resetJsonBtn" class="secondary">Reset Sample JSON</button>
+        </div>
+        <div id="jsonMessage"></div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="section-title">
+        <h3>Accepted JSON Format</h3>
+      </div>
+<pre>{
+  "Scottie Scheffler": { "toPar": 0, "status": "not_started", "thru": "--" },
+  "Collin Morikawa": { "toPar": -2, "status": "active", "thru": "12" },
+  "Viktor Hovland": { "toPar": 3, "status": "cut", "thru": "CUT" }
+}</pre>
+    </div>
+  </div>
+
+  <script>
+    const POOL_MEMBERS = [
+      { member: "Mark", players: ["Scottie Scheffler", "Collin Morikawa", "Tommy Fleetwood", "Chris Gotterup", "Ben Griffin"] },
+      { member: "Marty", players: ["Rory McIlroy", "Cameron Young", "Justin Thomas", "Viktor Hovland", "Tyrrell Hatton"] },
+      { member: "Don", players: ["Xander Schauffele", "Jon Rahm", "Sam Burns", "Patrick Cantlay", "Wyndham Clark"] },
+      { member: "Jeff", players: ["Bryson DeChambeau", "Hideki Matsuyama", "Akshay Bhatia", "Patrick Reed", "Brooks Koepka"] },
+      { member: "Cameron", players: ["Ludvig Åberg", "Matt Fitzpatrick", "Justin Rose", "Robert MacIntyre", "Shane Lowry"] }
+    ];
+
+    const DEFAULT_SCORES = {
+      "Scottie Scheffler": { toPar: 0, status: "not_started", thru: "--" },
+      "Collin Morikawa": { toPar: 0, status: "not_started", thru: "--" },
+      "Tommy Fleetwood": { toPar: 0, status: "not_started", thru: "--" },
+      "Chris Gotterup": { toPar: 0, status: "not_started", thru: "--" },
+      "Ben Griffin": { toPar: 0, status: "not_started", thru: "--" },
+      "Rory McIlroy": { toPar: 0, status: "not_started", thru: "--" },
+      "Cameron Young": { toPar: 0, status: "not_started", thru: "--" },
+      "Justin Thomas": { toPar: 0, status: "not_started", thru: "--" },
+      "Viktor Hovland": { toPar: 0, status: "not_started", thru: "--" },
+      "Tyrrell Hatton": { toPar: 0, status: "not_started", thru: "--" },
+      "Xander Schauffele": { toPar: 0, status: "not_started", thru: "--" },
+      "Jon Rahm": { toPar: 0, status: "not_started", thru: "--" },
+      "Sam Burns": { toPar: 0, status: "not_started", thru: "--" },
+      "Patrick Cantlay": { toPar: 0, status: "not_started", thru: "--" },
+      "Wyndham Clark": { toPar: 0, status: "not_started", thru: "--" },
+      "Bryson DeChambeau": { toPar: 0, status: "not_started", thru: "--" },
+      "Hideki Matsuyama": { toPar: 0, status: "not_started", thru: "--" },
+      "Akshay Bhatia": { toPar: 0, status: "not_started", thru: "--" },
+      "Patrick Reed": { toPar: 0, status: "not_started", thru: "--" },
+      "Brooks Koepka": { toPar: 0, status: "not_started", thru: "--" },
+      "Ludvig Åberg": { toPar: 0, status: "not_started", thru: "--" },
+      "Matt Fitzpatrick": { toPar: 0, status: "not_started", thru: "--" },
+      "Justin Rose": { toPar: 0, status: "not_started", thru: "--" },
+      "Robert MacIntyre": { toPar: 0, status: "not_started", thru: "--" },
+      "Shane Lowry": { toPar: 0, status: "not_started", thru: "--" }
+    };
+
+    let scores = JSON.parse(JSON.stringify(DEFAULT_SCORES));
+
+    function normalizeStatus(value){
+      const v = String(value || "active").toLowerCase();
+      if (["cut","mc","missed_cut","missed cut"].includes(v)) return "cut";
+      if (["wd","withdrawn"].includes(v)) return "wd";
+      if (["not_started","not started","scheduled","pre","preview"].includes(v)) return "not_started";
+      return "active";
+    }
+
+    function scoreLabel(value){
+      if (value === null || value === undefined || Number.isNaN(value)) return "—";
+      if (value === 0) return "E";
+      return value > 0 ? `+${value}` : `${value}`;
+    }
+
+    function badgeHtml(status){
+      if (status === "cut") return '<span class="badge red">CUT</span>';
+      if (status === "wd") return '<span class="badge gray">WD</span>';
+      if (status === "not_started") return '<span class="badge gray">Not Started</span>';
+      return '<span class="badge green">Active</span>';
+    }
+
+    function renderManualTable(){
+      const tbody = document.getElementById("manualTableBody");
+      const players = Object.keys(DEFAULT_SCORES);
+      tbody.innerHTML = players.map(player => {
+        const s = scores[player] || { toPar: 0, status: "not_started", thru: "--" };
+        const numeric = s.toPar === null || s.toPar === undefined ? "" : s.toPar;
+        return `
+          <tr>
+            <td><strong>${player}</strong></td>
+            <td><input type="number" step="1" data-player="${player}" data-field="toPar" value="${numeric}"></td>
+            <td>
+              <select data-player="${player}" data-field="status">
+                <option value="not_started" ${normalizeStatus(s.status)==="not_started"?"selected":""}>Not Started</option>
+                <option value="active" ${normalizeStatus(s.status)==="active"?"selected":""}>Active</option>
+                <option value="cut" ${normalizeStatus(s.status)==="cut"?"selected":""}>Cut</option>
+                <option value="wd" ${normalizeStatus(s.status)==="wd"?"selected":""}>WD</option>
+              </select>
+            </td>
+            <td><input type="text" data-player="${player}" data-field="thru" value="${s.thru || '--'}"></td>
+          </tr>
+        `;
+      }).join("");
+    }
+
+    function calculateResults(){
+      return POOL_MEMBERS.map(entry => {
+        const playerRows = entry.players.map(player => {
+          const data = scores[player] || {};
+          return {
+            player,
+            toPar: typeof data.toPar === "number" ? data.toPar : Number(data.toPar || 0),
+            status: normalizeStatus(data.status),
+            thru: data.thru || "--"
+          };
+        });
+
+        const madeCut = playerRows.filter(p => p.status === "active").length;
+        const eligible = madeCut >= 3;
+        const totalScore = playerRows.reduce((sum, p) => sum + (Number.isFinite(p.toPar) ? p.toPar : 0), 0);
+
+        return { ...entry, playerRows, madeCut, eligible, totalScore };
+      }).sort((a,b) => {
+        if (a.eligible !== b.eligible) return a.eligible ? -1 : 1;
+        if (a.totalScore !== b.totalScore) return a.totalScore - b.totalScore;
+        return b.madeCut - a.madeCut;
+      }).map((entry, index) => ({ ...entry, rank: index + 1 }));
+    }
+
+    function renderBoard(){
+      const results = calculateResults();
+      document.getElementById("leaderboard").innerHTML = results.map(entry => `
+        <div class="card team-card">
+          <div class="team-header">
+            <div>
+              <div class="small muted">Rank #${entry.rank}</div>
+              <div style="font-size:30px;font-weight:800;margin-top:4px;">${entry.member}</div>
+            </div>
+            <div class="team-total">
+              <div class="label">Team total</div>
+              <div class="score">${scoreLabel(entry.totalScore)}</div>
+            </div>
+          </div>
+          <div class="actions" style="margin-bottom:8px;">
+            <span class="badge ${entry.eligible ? "green" : "gray"}">${entry.madeCut}/5 made cut</span>
+            ${entry.eligible ? '<span class="badge blue">Eligible</span>' : '<span class="badge red">Below cut minimum</span>'}
+          </div>
+          ${entry.playerRows.map(p => `
+            <div class="player">
+              <div>
+                <div class="player-name">${p.player}</div>
+                <div class="small muted">Thru: ${p.thru}</div>
+              </div>
+              <div style="display:flex;align-items:center;gap:10px;">
+                <div class="player-score">${scoreLabel(p.toPar)}</div>
+                ${badgeHtml(p.status)}
+              </div>
+            </div>
+          `).join("")}
+        </div>
+      `).join("");
+
+      const allPlayers = Object.keys(DEFAULT_SCORES);
+      const activeCount = allPlayers.filter(name => normalizeStatus(scores[name]?.status) === "active").length;
+      const cutCount = allPlayers.filter(name => normalizeStatus(scores[name]?.status) === "cut").length;
+      const notStartedCount = allPlayers.filter(name => normalizeStatus(scores[name]?.status) === "not_started").length;
+
+      document.getElementById("activeCount").textContent = activeCount;
+      document.getElementById("cutCount").textContent = cutCount;
+      document.getElementById("notStartedCount").textContent = notStartedCount;
+      document.getElementById("lastUpdated").textContent = new Date().toLocaleString();
+      document.getElementById("jsonInput").value = JSON.stringify(scores, null, 2);
+    }
+
+    function applyManualChanges(){
+      const inputs = document.querySelectorAll("[data-player]");
+      const updated = JSON.parse(JSON.stringify(scores));
+
+      inputs.forEach(el => {
+        const player = el.dataset.player;
+        const field = el.dataset.field;
+        if (!updated[player]) updated[player] = { toPar: 0, status: "not_started", thru: "--" };
+
+        if (field === "toPar") {
+          const raw = el.value.trim();
+          updated[player][field] = raw === "" ? 0 : Number(raw);
+        } else if (field === "status") {
+          updated[player][field] = normalizeStatus(el.value);
+        } else {
+          updated[player][field] = el.value.trim() || "--";
+        }
+      });
+
+      scores = updated;
+      renderBoard();
+      showMessage("manualMessage", "Manual changes applied.", "success");
+    }
+
+    function resetScores(){
+      scores = JSON.parse(JSON.stringify(DEFAULT_SCORES));
+      renderManualTable();
+      renderBoard();
+      showMessage("manualMessage", "Scores reset to even / not started.", "success");
+      showMessage("jsonMessage", "", "");
+    }
+
+    function applyJson(){
+      try {
+        const parsed = JSON.parse(document.getElementById("jsonInput").value);
+        scores = parsed;
+        renderManualTable();
+        renderBoard();
+        showMessage("jsonMessage", "JSON applied.", "success");
+      } catch (err) {
+        showMessage("jsonMessage", "JSON error: " + err.message, "error");
+      }
+    }
+
+    function saveLocalCopy(){
+      localStorage.setItem("masters_fantasy_pool_2026_scores", JSON.stringify(scores));
+      showMessage("manualMessage", "Saved to this browser.", "success");
+    }
+
+    function loadLocalCopy(){
+      const raw = localStorage.getItem("masters_fantasy_pool_2026_scores");
+      if (!raw) {
+        showMessage("manualMessage", "No saved local copy found in this browser.", "error");
+        return;
+      }
+      try{
+        scores = JSON.parse(raw);
+        renderManualTable();
+        renderBoard();
+        showMessage("manualMessage", "Loaded saved local copy.", "success");
+      }catch(err){
+        showMessage("manualMessage", "Saved copy could not be loaded.", "error");
+      }
+    }
+
+    function showMessage(id, text, type){
+      const el = document.getElementById(id);
+      el.className = type || "";
+      el.textContent = text || "";
+    }
+
+    document.getElementById("applyManualBtn").addEventListener("click", applyManualChanges);
+    document.getElementById("resetBtn").addEventListener("click", resetScores);
+    document.getElementById("applyJsonBtn").addEventListener("click", applyJson);
+    document.getElementById("resetJsonBtn").addEventListener("click", () => {
+      document.getElementById("jsonInput").value = JSON.stringify(DEFAULT_SCORES, null, 2);
+      showMessage("jsonMessage", "Sample JSON loaded.", "success");
+    });
+    document.getElementById("saveBtn").addEventListener("click", saveLocalCopy);
+    document.getElementById("loadBtn").addEventListener("click", loadLocalCopy);
+
+    renderManualTable();
+    renderBoard();
+  </script>
+</body>
+</html>
