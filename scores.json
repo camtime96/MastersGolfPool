@@ -1,27 +1,127 @@
 {
-  "Scottie Scheffler": { "toPar": 0, "status": "not_started", "thru": "--" },
-  "Collin Morikawa": { "toPar": 0, "status": "not_started", "thru": "--" },
-  "Tommy Fleetwood": { "toPar": 0, "status": "not_started", "thru": "--" },
-  "Chris Gotterup": { "toPar": 0, "status": "not_started", "thru": "--" },
-  "Ben Griffin": { "toPar": 0, "status": "not_started", "thru": "--" },
-  "Rory McIlroy": { "toPar": 0, "status": "not_started", "thru": "--" },
-  "Cameron Young": { "toPar": 0, "status": "not_started", "thru": "--" },
-  "Justin Thomas": { "toPar": 0, "status": "not_started", "thru": "--" },
-  "Viktor Hovland": { "toPar": 0, "status": "not_started", "thru": "--" },
-  "Tyrrell Hatton": { "toPar": 0, "status": "not_started", "thru": "--" },
-  "Xander Schauffele": { "toPar": 0, "status": "not_started", "thru": "--" },
-  "Jon Rahm": { "toPar": 0, "status": "not_started", "thru": "--" },
-  "Sam Burns": { "toPar": 0, "status": "not_started", "thru": "--" },
-  "Patrick Cantlay": { "toPar": 0, "status": "not_started", "thru": "--" },
-  "Wyndham Clark": { "toPar": 0, "status": "not_started", "thru": "--" },
-  "Bryson DeChambeau": { "toPar": 0, "status": "not_started", "thru": "--" },
-  "Hideki Matsuyama": { "toPar": 0, "status": "not_started", "thru": "--" },
-  "Akshay Bhatia": { "toPar": 0, "status": "not_started", "thru": "--" },
-  "Patrick Reed": { "toPar": 0, "status": "not_started", "thru": "--" },
-  "Brooks Koepka": { "toPar": 0, "status": "not_started", "thru": "--" },
-  "Ludvig Åberg": { "toPar": 0, "status": "not_started", "thru": "--" },
-  "Matt Fitzpatrick": { "toPar": 0, "status": "not_started", "thru": "--" },
-  "Justin Rose": { "toPar": 0, "status": "not_started", "thru": "--" },
-  "Robert MacIntyre": { "toPar": 0, "status": "not_started", "thru": "--" },
-  "Shane Lowry": { "toPar": 0, "status": "not_started", "thru": "--" }
+  "Scottie Scheffler": {
+    "toPar": 0,
+    "status": "not_started",
+    "thru": "--"
+  },
+  "Collin Morikawa": {
+    "toPar": 0,
+    "status": "active",
+    "thru": "3"
+  },
+  "Tommy Fleetwood": {
+    "toPar": -3,
+    "status": "active",
+    "thru": "4"
+  },
+  "Chris Gotterup": {
+    "toPar": 0,
+    "status": "not_started",
+    "thru": "--"
+  },
+  "Ben Griffin": {
+    "toPar": 0,
+    "status": "not_started",
+    "thru": "--"
+  },
+  "Rory McIlroy": {
+    "toPar": -1,
+    "status": "active",
+    "thru": "2"
+  },
+  "Cameron Young": {
+    "toPar": 1,
+    "status": "active",
+    "thru": "2"
+  },
+  "Justin Thomas": {
+    "toPar": 0,
+    "status": "not_started",
+    "thru": "--"
+  },
+  "Viktor Hovland": {
+    "toPar": 0,
+    "status": "active",
+    "thru": "1"
+  },
+  "Tyrrell Hatton": {
+    "toPar": 0,
+    "status": "not_started",
+    "thru": "--"
+  },
+  "Xander Schauffele": {
+    "toPar": 0,
+    "status": "active",
+    "thru": "4"
+  },
+  "Jon Rahm": {
+    "toPar": 0,
+    "status": "not_started",
+    "thru": "--"
+  },
+  "Sam Burns": {
+    "toPar": 1,
+    "status": "active",
+    "thru": "7"
+  },
+  "Patrick Cantlay": {
+    "toPar": 1,
+    "status": "active",
+    "thru": "1"
+  },
+  "Wyndham Clark": {
+    "toPar": 0,
+    "status": "not_started",
+    "thru": "--"
+  },
+  "Bryson DeChambeau": {
+    "toPar": 0,
+    "status": "active",
+    "thru": "4"
+  },
+  "Hideki Matsuyama": {
+    "toPar": 0,
+    "status": "not_started",
+    "thru": "--"
+  },
+  "Akshay Bhatia": {
+    "toPar": -2,
+    "status": "active",
+    "thru": "4"
+  },
+  "Patrick Reed": {
+    "toPar": -3,
+    "status": "active",
+    "thru": "4"
+  },
+  "Brooks Koepka": {
+    "toPar": 0,
+    "status": "not_started",
+    "thru": "--"
+  },
+  "Ludvig Åberg": {
+    "toPar": 0,
+    "status": "not_started",
+    "thru": "--"
+  },
+  "Matt Fitzpatrick": {
+    "toPar": 1,
+    "status": "active",
+    "thru": "4"
+  },
+  "Justin Rose": {
+    "toPar": 0,
+    "status": "not_started",
+    "thru": "--"
+  },
+  "Robert MacIntyre": {
+    "toPar": 0,
+    "status": "not_started",
+    "thru": "--"
+  },
+  "Shane Lowry": {
+    "toPar": 0,
+    "status": "active",
+    "thru": "5"
+  }
 }
